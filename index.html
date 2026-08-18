@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-<title>Hello Miss</title>
- <link rel="icon" type="image/svg+xml" href="./heartsays(fevicon).png" />
+<title>hii Arya</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
@@ -222,6 +221,18 @@
 
   .confetti-piece{position:fixed;width:8px;height:14px;top:-20px;opacity:.95;border-radius:2px;pointer-events:none;z-index:5;}
 
+  .sound-toggle{
+    position:fixed;top:calc(16px + env(safe-area-inset-top));right:16px;
+    width:42px;height:42px;border-radius:50%;
+    background:#fff;border:2px solid #FFE0C4;
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;cursor:pointer;z-index:8;
+    box-shadow:0 8px 18px -8px rgba(180,120,80,.5);
+    opacity:0;pointer-events:none;transform:scale(.8);
+    transition:all .3s ease;
+  }
+  .sound-toggle.show{opacity:1;pointer-events:auto;transform:scale(1);}
+
   @media (max-width:340px){
     .card{padding:20px 16px 18px;}
   }
@@ -238,8 +249,8 @@
   </div>
 
   <div class="screen active" id="screen-1">
-    <h1>hii Dimpal 👋</h1>
-    <p class="sub">I have got something for you</p>
+    <h1>hii Arya 👋</h1>
+    <p class="sub">someone's got something for you</p>
     <div class="blob-wrap">
       <span class="tap-counter" id="tapCounter">+1</span>
       <div class="blob" id="blobTap">
@@ -255,8 +266,8 @@
         <div class="mouth"></div>
       </div>
     </div>
-    <button class="cta" id="hiiBtn">Tap the Panda</button>
-    <p class="hint" id="hintText"> Hit the Button</p>
+    <button class="cta" id="hiiBtn">say hii back</button>
+    <p class="hint" id="hintText">tap the blob a few times, or hit the button</p>
   </div>
 
   <div class="screen" id="screen-2">
@@ -304,6 +315,8 @@
 </div>
 
 <div class="toast" id="toast"></div>
+<button class="sound-toggle" id="soundToggle" aria-label="mute music">🔊</button>
+<audio id="bgSong" src="our-song.mp3" loop preload="none"></audio>
 
 <script>
   const IG_USERNAME = 'dil_kijubaa';
@@ -419,7 +432,28 @@
       showScreen('screen-2', 2);
       typeMessage();
     }, 350);
+    const song = document.getElementById('bgSong');
+    const soundToggle = document.getElementById('soundToggle');
+    song.volume = 0.55;
+    song.play().then(() => {
+      soundToggle.textContent = '🔊';
+    }).catch(() => {
+      soundToggle.textContent = '🔇';
+      /* autoplay blocked by the browser — she can tap the toggle to start it */
+    });
+    soundToggle.classList.add('show');
   }
+
+  const soundToggle = document.getElementById('soundToggle');
+  soundToggle.addEventListener('click', () => {
+    const song = document.getElementById('bgSong');
+    if(song.paused){
+      song.play().then(() => { soundToggle.textContent = '🔊'; }).catch(() => {});
+    } else {
+      song.pause();
+      soundToggle.textContent = '🔇';
+    }
+  });
 
   const fullMsg = "Yes — it's really you. You don't know me, but I know you a little, and I just wanted to say a hii full of joy to a really cute girl.";
   function typeMessage(){
